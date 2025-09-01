@@ -2,6 +2,7 @@ package com.oracle.service;
 
 import com.oracle.entity.*;
 import com.oracle.repository.*;
+import com.oracle.kafka.NotificationPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +14,13 @@ import java.time.YearMonth;
 public class ClaimService {
     private final ClaimRepository claimRepository;
     private final PolicyRepository policyRepository;
+    private final NotificationPublisher notificationPublisher;
 
-    public ClaimService(ClaimRepository claimRepository, PolicyRepository policyRepository) {
+    public ClaimService(ClaimRepository claimRepository, PolicyRepository policyRepository,
+                        NotificationPublisher notificationPublisher) {
         this.claimRepository = claimRepository;
         this.policyRepository = policyRepository;
+        this.notificationPublisher = notificationPublisher;
     }
 
     @Transactional
@@ -77,7 +81,9 @@ public class ClaimService {
         } else {
             throw new IllegalArgumentException("Invalid decision");
         }
-        return claimRepository.save(claim);
+        Claim saved = claimRepository.save(claim);
+        notificationPublisher.claimDecision(saved);
+        return saved;
     }
 
     @Transactional
