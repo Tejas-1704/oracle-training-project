@@ -2,6 +2,7 @@ package com.oracle.service;
 
 import com.oracle.entity.*;
 import com.oracle.repository.*;
+import com.oracle.kafka.NotificationPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +18,16 @@ public class QuoteService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final PolicyRepository policyRepository;
+    private final NotificationPublisher notificationPublisher;
 
     public QuoteService(QuoteRepository quoteRepository, CustomerRepository customerRepository,
-                        ProductRepository productRepository, PolicyRepository policyRepository) {
+                        ProductRepository productRepository, PolicyRepository policyRepository,
+                        NotificationPublisher notificationPublisher) {
         this.quoteRepository = quoteRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.policyRepository = policyRepository;
+        this.notificationPublisher = notificationPublisher;
     }
 
     @Transactional
@@ -108,6 +112,7 @@ public class QuoteService {
         Policy saved = policyRepository.save(policy);
         quote.setStatus(QuoteStatus.CONFIRMED);
         quoteRepository.save(quote);
+        notificationPublisher.policyIssued(saved);
         return saved;
     }
 
