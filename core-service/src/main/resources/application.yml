@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: core-service
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    username: CORE_USER
+    password: CORE_PASSWORD
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+springdoc:
+  api-docs:
+    enabled: true
