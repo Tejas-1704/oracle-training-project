@@ -1,0 +1,12 @@
+<div class="p-8">
+  <h2 class="text-3xl font-bold mb-4">Payments</h2>
+  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-2">
+    <input [(ngModel)]="targetId" name="targetId" placeholder="Target ID" class="p-2 border rounded" />
+    <input [(ngModel)]="amount" name="amount" type="number" placeholder="Amount" class="p-2 border rounded" />
+    <input [(ngModel)]="method" name="method" placeholder="Method" class="p-2 border rounded" />
+    <button type="submit" class="bg-yellow-600 text-white rounded px-4 py-2">Add</button>
+  </form>
+  <ul class="list-disc pl-6">
+    <li *ngFor="let p of payments">{{p.targetId}} - {{p.amount}}</li>
+  </ul>
+</div>

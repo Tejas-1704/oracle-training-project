@@ -1,0 +1,23 @@
+<div class="p-8">
+  <h2 class="text-3xl font-bold mb-4">Products</h2>
+  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-2">
+    <input [(ngModel)]="name" name="name" placeholder="Name" class="p-2 border rounded" />
+    <input [(ngModel)]="code" name="code" placeholder="Code" class="p-2 border rounded" />
+    <input [(ngModel)]="rate" name="rate" type="number" placeholder="Base Rate" class="p-2 border rounded" />
+    <button type="submit" class="bg-green-600 text-white rounded px-4 py-2">Add</button>
+  </form>
+  <table class="min-w-full bg-white shadow rounded">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="py-2 px-4 text-left">Name</th>
+        <th class="py-2 px-4 text-left">Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products" class="border-t">
+        <td class="py-2 px-4">{{p.name}}</td>
+        <td class="py-2 px-4">{{p.code}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

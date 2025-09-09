@@ -1,0 +1,23 @@
+<div class="p-8">
+  <h2 class="text-3xl font-bold mb-4">Customers</h2>
+  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-2">
+    <input [(ngModel)]="firstName" name="firstName" placeholder="First Name" class="p-2 border rounded" />
+    <input [(ngModel)]="lastName" name="lastName" placeholder="Last Name" class="p-2 border rounded" />
+    <input [(ngModel)]="email" name="email" placeholder="Email" class="p-2 border rounded md:col-span-2" />
+    <button type="submit" class="bg-blue-600 text-white rounded px-4 py-2">Add</button>
+  </form>
+  <table class="min-w-full bg-white shadow rounded">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="py-2 px-4 text-left">Name</th>
+        <th class="py-2 px-4 text-left">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of customers" class="border-t">
+        <td class="py-2 px-4">{{c.firstName}} {{c.lastName}}</td>
+        <td class="py-2 px-4">{{c.email}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

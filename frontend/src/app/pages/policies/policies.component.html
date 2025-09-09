@@ -1,0 +1,17 @@
+<div class="p-8">
+  <h2 class="text-3xl font-bold mb-4">Policies</h2>
+  <table class="min-w-full bg-white shadow rounded">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="py-2 px-4 text-left">ID</th>
+        <th class="py-2 px-4 text-left">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of policies" class="border-t">
+        <td class="py-2 px-4">{{p.id}}</td>
+        <td class="py-2 px-4">{{p.status}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
