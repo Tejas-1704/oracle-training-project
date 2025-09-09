@@ -1,0 +1,28 @@
+<div class="p-8">
+  <h2 class="text-3xl font-bold mb-4">Claims</h2>
+  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-2">
+    <input [(ngModel)]="policyId" name="policyId" placeholder="Policy ID" class="p-2 border rounded" />
+    <input [(ngModel)]="lossDate" name="lossDate" type="date" class="p-2 border rounded" />
+    <input [(ngModel)]="description" name="description" placeholder="Description" class="p-2 border rounded" />
+    <button type="submit" class="bg-red-600 text-white rounded px-4 py-2">Add</button>
+  </form>
+  <table class="min-w-full bg-white shadow rounded">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="py-2 px-4 text-left">ID</th>
+        <th class="py-2 px-4 text-left">Status</th>
+        <th class="py-2 px-4 text-left">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of claims" class="border-t">
+        <td class="py-2 px-4">{{c.id}}</td>
+        <td class="py-2 px-4">{{c.status}}</td>
+        <td class="py-2 px-4 space-x-2">
+          <button (click)="assess(c.id)" class="bg-blue-500 text-white px-2 py-1 rounded">Assess</button>
+          <button (click)="close(c.id)" class="bg-green-500 text-white px-2 py-1 rounded">Close</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

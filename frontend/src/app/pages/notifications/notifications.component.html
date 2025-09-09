@@ -1,0 +1,9 @@
+<div class="p-8">
+  <h2 class="text-3xl font-bold mb-4">Notifications</h2>
+  <form (ngSubmit)="send()" class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-2">
+    <input [(ngModel)]="to" name="to" placeholder="Recipient" class="p-2 border rounded" />
+    <input [(ngModel)]="subject" name="subject" placeholder="Subject" class="p-2 border rounded" />
+    <button type="submit" class="bg-pink-600 text-white rounded px-4 py-2">Send</button>
+  </form>
+  <div *ngIf="message" class="text-green-600">{{message}}</div>
+</div>
