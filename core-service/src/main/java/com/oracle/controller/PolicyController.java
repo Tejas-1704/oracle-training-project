@@ -3,6 +3,7 @@ package com.oracle.controller;
 import com.oracle.entity.Policy;
 import com.oracle.entity.PolicyStatus;
 import com.oracle.service.PolicyService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +18,14 @@ public class PolicyController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Policy> list(@RequestParam(value = "customer_id", required = false) String customerId,
                              @RequestParam(value = "status", required = false) PolicyStatus status) {
         return service.list(customerId, status);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Policy get(@PathVariable String id) {
         return service.get(id);
     }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../api.service';
@@ -7,7 +7,7 @@ import { ApiService } from '../../api.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -20,7 +20,10 @@ export class LoginComponent {
 
   login() {
     this.api.login({ username: this.username, password: this.password }).subscribe({
-      next: () => this.router.navigate(['/customers']),
+      next: () => {
+        this.api.setAuth(this.username, this.password);
+        this.router.navigate(['/customers']);
+      },
       error: () => (this.error = 'Login failed')
     });
   }
