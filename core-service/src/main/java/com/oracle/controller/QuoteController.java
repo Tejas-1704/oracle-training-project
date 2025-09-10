@@ -6,6 +6,7 @@ import com.oracle.entity.Policy;
 import com.oracle.entity.Quote;
 import com.oracle.entity.QuoteStatus;
 import com.oracle.service.QuoteService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,33 +21,39 @@ public class QuoteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Quote create(@RequestBody QuoteRequest request) {
         return service.create(request.getCustomerId(), request.getProductId(), request.getSumAssured(), request.getTermMonths());
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Quote> list(@RequestParam(value = "customer_id", required = false) String customerId,
                              @RequestParam(value = "status", required = false) QuoteStatus status) {
         return service.list(customerId, status);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Quote get(@PathVariable String id) {
         return service.get(id);
     }
 
     // need to use request header instead of PathVariable
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Quote update(@PathVariable String id, @RequestBody QuoteUpdateRequest req) {
         return service.update(id, req.getSumAssured(), req.getTermMonths());
     }
 
     @PostMapping("/{id}/price")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Quote price(@PathVariable String id) {
         return service.price(id);
     }
 
     @PostMapping("/{id}/confirm")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Policy confirm(@PathVariable String id) {
         return service.confirm(id);
     }
