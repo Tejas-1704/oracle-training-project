@@ -53,7 +53,7 @@ public class QuoteController {
     }
 
     @PostMapping("/{id}/confirm")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Policy confirm(@PathVariable String id) {
         return service.confirm(id);
     }

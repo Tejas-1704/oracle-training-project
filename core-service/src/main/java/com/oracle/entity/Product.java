@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.time.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "products", indexes = {
         @Index(name = "idx_products_code", columnList = "code", unique = true)
@@ -37,7 +40,9 @@ public class Product {
     @Version
     private Long version;
 
+//    	@CreationTimestamp
     private OffsetDateTime createdAt;
+//    	@UpdateTimestamp
     private OffsetDateTime updatedAt;
 
     @PrePersist
@@ -46,7 +51,7 @@ public class Product {
     }
 
     @PreUpdate
-    public void preUpdate() {
+  public void preUpdate() {
         this.updatedAt = OffsetDateTime.now();
-    }
+   }
 }

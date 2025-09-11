@@ -11,6 +11,7 @@ import java.time.YearMonth;
 import java.util.List;
 //import java.util.Optional;
 import java.util.UUID;
+import java.util.NoSuchElementException;
 
 @Service
 public class QuoteService {
@@ -32,8 +33,10 @@ public class QuoteService {
 
     @Transactional
     public Quote create(String customerId, String productId, int sumAssured, int termMonths) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow();
-        Product product = productRepository.findById(productId).orElseThrow();
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("Product not found"));
         validateProduct(product, sumAssured, termMonths);
         Quote quote = new Quote();
         quote.setCustomer(customer);
@@ -95,8 +98,9 @@ public class QuoteService {
     @Transactional
     public Policy confirm(String id) {
         Quote quote = get(id);
+        // If not priced yet, attempt to price automatically
         if (quote.getStatus() != QuoteStatus.PRICED || quote.getPremiumCached() == null) {
-            throw new IllegalStateException("Quote not priced");
+            quote = price(id);
         }
         Policy policy = new Policy();
         policy.setPolicyNumber(generatePolicyNumber());

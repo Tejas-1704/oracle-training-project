@@ -31,7 +31,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
             AppUser user = userService.findByUsername(request.getUsername());
-            UserResponse response = new UserResponse(user.getId(), user.getUsername(), user.getRoles());
+            UserResponse response = new UserResponse(user.getId(), user.getUsername(), user.getRoles(), user.getCustomerId());
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -1,22 +1,65 @@
 <div class="p-8">
   <h2 class="text-3xl font-bold mb-4">Customers</h2>
-  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-2">
+  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-7 gap-2">
     <input [(ngModel)]="firstName" name="firstName" placeholder="First Name" class="p-2 border rounded" />
     <input [(ngModel)]="lastName" name="lastName" placeholder="Last Name" class="p-2 border rounded" />
-    <input [(ngModel)]="email" name="email" placeholder="Email" class="p-2 border rounded md:col-span-2" />
-    <button type="submit" class="bg-blue-600 text-white rounded px-4 py-2">Add</button>
+    <input [(ngModel)]="email" name="email" placeholder="Email" class="p-2 border rounded" />
+    <input [(ngModel)]="phone" name="phone" placeholder="Phone" class="p-2 border rounded" />
+    <input [(ngModel)]="dob" name="dob" type="date" placeholder="DOB" class="p-2 border rounded" />
+    <button type="submit" class="bg-blue-600 text-white rounded px-4 py-2 md:col-span-2">Add</button>
   </form>
   <table class="min-w-full bg-white shadow rounded">
     <thead class="bg-gray-200">
       <tr>
         <th class="py-2 px-4 text-left">Name</th>
         <th class="py-2 px-4 text-left">Email</th>
+        <th class="py-2 px-4 text-left">Phone</th>
+        <th class="py-2 px-4 text-left">DOB</th>
+        <th class="py-2 px-4 text-left">Created</th>
+        <th class="py-2 px-4 text-left">Updated</th>
+        <th class="py-2 px-4 text-left" *ngIf="isAdmin">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let c of customers" class="border-t">
-        <td class="py-2 px-4">{{c.firstName}} {{c.lastName}}</td>
-        <td class="py-2 px-4">{{c.email}}</td>
+      <tr *ngFor="let c of customers" class="border-t align-top">
+        <td class="py-2 px-4">
+          <div *ngIf="!c._editing">{{c.firstName}} {{c.lastName}}</div>
+          <div *ngIf="c._editing" class="flex gap-2">
+            <input [(ngModel)]="c._edit.firstName" name="fn{{c.id}}" class="p-1 border rounded w-28" />
+            <input [(ngModel)]="c._edit.lastName" name="ln{{c.id}}" class="p-1 border rounded w-28" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!c._editing">{{c.email}}</div>
+          <div *ngIf="c._editing">
+            <input [(ngModel)]="c._edit.email" name="em{{c.id}}" class="p-1 border rounded w-56" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!c._editing">{{c.phone || '-'}}
+          </div>
+          <div *ngIf="c._editing">
+            <input [(ngModel)]="c._edit.phone" name="ph{{c.id}}" class="p-1 border rounded w-32" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!c._editing">{{c.dob || '-'}}</div>
+          <div *ngIf="c._editing">
+            <input [(ngModel)]="c._edit.dob" name="db{{c.id}}" type="date" class="p-1 border rounded w-40" />
+          </div>
+        </td>
+        <td class="py-2 px-4">{{c.createdAt}}</td>
+        <td class="py-2 px-4">{{c.updatedAt}}</td>
+        <td class="py-2 px-4" *ngIf="isAdmin">
+          <div *ngIf="!c._editing" class="flex gap-2">
+            <button type="button" (click)="enableEdit(c)" class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+            <button type="button" (click)="deleteCustomer(c)" class="bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+          </div>
+          <div *ngIf="c._editing" class="flex gap-2">
+            <button type="button" (click)="saveEdit(c)" class="bg-green-600 text-white px-3 py-1 rounded">Save</button>
+            <button type="button" (click)="cancelEdit(c)" class="bg-gray-500 text-white px-3 py-1 rounded">Cancel</button>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>

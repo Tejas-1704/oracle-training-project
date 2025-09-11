@@ -11,4 +11,5 @@ public class UserResponse {
     private String id;
     private String username;
     private Set<String> roles;
+    private String customerId;
 }

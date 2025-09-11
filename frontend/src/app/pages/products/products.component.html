@@ -1,22 +1,108 @@
 <div class="p-8">
   <h2 class="text-3xl font-bold mb-4">Products</h2>
-  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-2">
-    <input [(ngModel)]="name" name="name" placeholder="Name" class="p-2 border rounded" />
-    <input [(ngModel)]="code" name="code" placeholder="Code" class="p-2 border rounded" />
-    <input [(ngModel)]="rate" name="rate" type="number" placeholder="Base Rate" class="p-2 border rounded" />
-    <button type="submit" class="bg-green-600 text-white rounded px-4 py-2">Add</button>
-  </form>
+  <div *ngIf="isAdmin">
+    <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-8 gap-2 items-end">
+      <input [(ngModel)]="name" name="name" placeholder="Name" class="p-2 border rounded" required />
+      <input [(ngModel)]="code" name="code" placeholder="Code" class="p-2 border rounded" required />
+      <input [(ngModel)]="description" name="description" placeholder="Description" class="p-2 border rounded md:col-span-2" />
+      <input [(ngModel)]="rate" name="rate" type="number" placeholder="Base Rate/1000" class="p-2 border rounded" required />
+      <input [(ngModel)]="minSumAssured" name="minSumAssured" type="number" placeholder="Min Sum Assured" class="p-2 border rounded" />
+      <input [(ngModel)]="maxSumAssured" name="maxSumAssured" type="number" placeholder="Max Sum Assured" class="p-2 border rounded" />
+      <div class="flex gap-2">
+        <input [(ngModel)]="minTermMonths" name="minTermMonths" type="number" placeholder="Min Term" class="p-2 border rounded w-28" />
+        <input [(ngModel)]="maxTermMonths" name="maxTermMonths" type="number" placeholder="Max Term" class="p-2 border rounded w-28" />
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Active</span>
+        <select [(ngModel)]="activeSelect" name="activeSelect" class="p-2 border rounded">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </label>
+      <button type="submit" class="bg-green-600 text-white rounded px-4 py-2">Add</button>
+    </form>
+    <div class="mb-4 flex items-center gap-2">
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" [(ngModel)]="showActive" name="showActive" (change)="toggleActive()" />
+        <span>Show {{ showActive ? 'Active' : 'Inactive' }} Products</span>
+      </label>
+    </div>
+  </div>
   <table class="min-w-full bg-white shadow rounded">
     <thead class="bg-gray-200">
       <tr>
         <th class="py-2 px-4 text-left">Name</th>
         <th class="py-2 px-4 text-left">Code</th>
+        <th class="py-2 px-4 text-left">Description</th>
+        <th class="py-2 px-4 text-left">Base Rate/1000</th>
+        <th class="py-2 px-4 text-left">Sum Assured (Min–Max)</th>
+        <th class="py-2 px-4 text-left">Term Months (Min–Max)</th>
+        <th class="py-2 px-4 text-left">Active</th>
+        <th class="py-2 px-4 text-left">Created</th>
+        <th class="py-2 px-4 text-left">Updated</th>
+        <th class="py-2 px-4 text-left" *ngIf="isAdmin">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of products" class="border-t">
-        <td class="py-2 px-4">{{p.name}}</td>
-        <td class="py-2 px-4">{{p.code}}</td>
+      <tr *ngFor="let p of products" class="border-t align-top">
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.name}}</div>
+          <div *ngIf="p._editing">
+            <input [(ngModel)]="p._edit.name" name="nm{{p.id}}" class="p-1 border rounded w-40" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.code}}</div>
+          <div *ngIf="p._editing">
+            <input [(ngModel)]="p._edit.code" name="cd{{p.id}}" class="p-1 border rounded w-40" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.description || '-'}}
+          </div>
+          <div *ngIf="p._editing">
+            <input [(ngModel)]="p._edit.description" name="ds{{p.id}}" class="p-1 border rounded w-64" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.baseRatePer1000}}</div>
+          <div *ngIf="p._editing">
+            <input [(ngModel)]="p._edit.baseRatePer1000" name="br{{p.id}}" type="number" class="p-1 border rounded w-32" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.minSumAssured}} – {{p.maxSumAssured}}</div>
+          <div *ngIf="p._editing" class="flex gap-2">
+            <input [(ngModel)]="p._edit.minSumAssured" name="saMin{{p.id}}" type="number" class="p-1 border rounded w-24" />
+            <input [(ngModel)]="p._edit.maxSumAssured" name="saMax{{p.id}}" type="number" class="p-1 border rounded w-24" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.minTermMonths}} – {{p.maxTermMonths}}</div>
+          <div *ngIf="p._editing" class="flex gap-2">
+            <input [(ngModel)]="p._edit.minTermMonths" name="tmMin{{p.id}}" type="number" class="p-1 border rounded w-24" />
+            <input [(ngModel)]="p._edit.maxTermMonths" name="tmMax{{p.id}}" type="number" class="p-1 border rounded w-24" />
+          </div>
+        </td>
+        <td class="py-2 px-4">
+          <div *ngIf="!p._editing">{{p.active ? 'Yes' : 'No'}}</div>
+          <div *ngIf="p._editing" class="flex items-center gap-2">
+            <input type="checkbox" [(ngModel)]="p._edit.active" name="ac{{p.id}}" />
+            <span>{{ p._edit.active ? 'Active' : 'Inactive' }}</span>
+          </div>
+        </td>
+        <td class="py-2 px-4">{{p.createdAt}}</td>
+        <td class="py-2 px-4">{{p.updatedAt}}</td>
+        <td class="py-2 px-4" *ngIf="isAdmin">
+          <div *ngIf="!p._editing" class="flex gap-2">
+            <button type="button" (click)="enableEdit(p)" class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+            <button type="button" (click)="deleteProduct(p)" class="bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+          </div>
+          <div *ngIf="p._editing" class="flex gap-2">
+            <button type="button" (click)="saveEdit(p)" class="bg-green-600 text-white px-3 py-1 rounded">Save</button>
+            <button type="button" (click)="cancelEdit(p)" class="bg-gray-500 text-white px-3 py-1 rounded">Cancel</button>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>

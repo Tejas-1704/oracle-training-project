@@ -28,4 +28,7 @@ public class AppUser {
     @CollectionTable(name = "app_user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     private Set<String> roles = new HashSet<>();
+
+    @Column(name = "customer_id")
+    private String customerId;
 }

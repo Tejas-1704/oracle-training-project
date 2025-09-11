@@ -1,11 +1,26 @@
-<nav *ngIf="showNav" class="bg-gray-800 text-white p-4 flex space-x-4">
-  <a routerLink="/customers" class="hover:underline">Customers</a>
-  <a routerLink="/products" class="hover:underline">Products</a>
-  <a routerLink="/quotes" class="hover:underline">Quotes</a>
-  <a routerLink="/policies" class="hover:underline">Policies</a>
-  <a routerLink="/claims" class="hover:underline">Claims</a>
-  <a routerLink="/documents" class="hover:underline">Documents</a>
-  <a routerLink="/payments" class="hover:underline">Payments</a>
-  <a routerLink="/notifications" class="hover:underline">Notifications</a>
+<nav *ngIf="showNav" class="bg-gray-800 text-white p-4 flex items-center">
+  <div class="flex space-x-4 flex-1">
+    <a routerLink="/customers" class="hover:underline">Customers</a>
+    <a routerLink="/products" class="hover:underline">Products</a>
+    <a routerLink="/quotes" class="hover:underline">Quotes</a>
+    <a routerLink="/policies" class="hover:underline">Policies</a>
+    <a routerLink="/claims" class="hover:underline">Claims</a>
+    <a routerLink="/documents" class="hover:underline">Documents</a>
+    <a routerLink="/payments" class="hover:underline">Payments</a>
+    <a routerLink="/notifications" class="hover:underline">Notifications</a>
+  </div>
+  <div class="relative" (click)="toggleProfile()">
+    <div class="flex items-center gap-2 cursor-pointer select-none">
+      <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+        <span class="text-sm">{{ userInitials }}</span>
+      </div>
+      <span class="text-xs opacity-80">{{ customerIdHint }}</span>
+    </div>
+    <div *ngIf="showProfile" class="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg p-3">
+      <div class="text-xs mb-2">User: {{ username }}</div>
+      <div class="text-xs mb-3 break-all">ID: {{ userId }}</div>
+      <button type="button" (click)="logout($event)" class="w-full bg-red-600 text-white rounded px-3 py-1">Logout</button>
+    </div>
+  </div>
 </nav>
 <router-outlet></router-outlet>

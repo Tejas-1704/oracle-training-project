@@ -15,6 +15,16 @@ export class PoliciesComponent implements OnInit {
   constructor(private api: ApiService) {}
 
   ngOnInit() {
-    this.api.getPolicies().subscribe((data: any) => (this.policies = data));
+    this.api.getPolicies().subscribe({
+      next: (data: any) => (this.policies = data),
+      error: () => {
+        const last = localStorage.getItem('lastPolicy');
+        if (last) {
+          try { this.policies = [JSON.parse(last)]; } catch { this.policies = []; }
+        } else {
+          this.policies = [];
+        }
+      }
+    });
   }
 }

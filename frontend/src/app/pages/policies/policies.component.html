@@ -3,14 +3,21 @@
   <table class="min-w-full bg-white shadow rounded">
     <thead class="bg-gray-200">
       <tr>
-        <th class="py-2 px-4 text-left">ID</th>
+        <th class="py-2 px-4 text-left">Policy Number</th>
+        <th class="py-2 px-4 text-left">Product</th>
         <th class="py-2 px-4 text-left">Status</th>
+        <th class="py-2 px-4 text-left">Premium</th>
+        <th class="py-2 px-4 text-left">Issue Date</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of policies" class="border-t">
-        <td class="py-2 px-4">{{p.id}}</td>
+        <td class="py-2 px-4">{{p.policyNumber}}</td>
+        <td class="py-2 px-4">{{p.product?.name || '-'}}
+        </td>
         <td class="py-2 px-4">{{p.status}}</td>
+        <td class="py-2 px-4">{{p.premium}}</td>
+        <td class="py-2 px-4">{{p.startDate}}</td>
       </tr>
     </tbody>
   </table>

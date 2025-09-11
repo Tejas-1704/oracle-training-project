@@ -2,9 +2,9 @@ spring:
   application:
     name: core-service
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: CORE_USER
-    password: CORE_PASSWORD
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: Rajesh
+    password: Rajesh
     driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     hibernate:

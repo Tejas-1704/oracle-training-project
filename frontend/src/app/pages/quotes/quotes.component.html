@@ -1,27 +1,49 @@
 <div class="p-8">
   <h2 class="text-3xl font-bold mb-4">Quotes</h2>
-  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-2">
-    <input [(ngModel)]="customerId" name="customerId" placeholder="Customer ID" class="p-2 border rounded" />
-    <input [(ngModel)]="productId" name="productId" placeholder="Product ID" class="p-2 border rounded" />
+  <form (ngSubmit)="create()" class="mb-6 grid grid-cols-1 md:grid-cols-6 gap-2 items-end">
+    <ng-container *ngIf="isAdmin; else userCustomer">
+      <select [(ngModel)]="customerId" name="customerId" class="p-2 border rounded">
+        <option value="" disabled selected>Select Customer</option>
+        <option *ngFor="let c of customers" [value]="c.id">{{c.firstName}} {{c.lastName}} ({{c.email}})</option>
+      </select>
+    </ng-container>
+    <ng-template #userCustomer>
+      <div>
+        <label class="text-xs text-gray-600 block mb-1">Customer ID</label>
+        <input [(ngModel)]="customerId" name="customerId" placeholder="Enter your Customer ID" class="p-2 border rounded w-full" />
+      </div>
+    </ng-template>
+    <select [(ngModel)]="productId" name="productId" class="p-2 border rounded">
+      <option value="" disabled selected>Select Product</option>
+      <option *ngFor="let p of products" [value]="p.id">{{p.name}} ({{p.code}})</option>
+    </select>
     <input [(ngModel)]="sumAssured" name="sumAssured" type="number" placeholder="Sum Assured" class="p-2 border rounded" />
-    <input [(ngModel)]="termMonths" name="termMonths" type="number" placeholder="Term" class="p-2 border rounded" />
-    <button type="submit" class="bg-purple-600 text-white rounded px-4 py-2">Add</button>
+    <input [(ngModel)]="termMonths" name="termMonths" type="number" placeholder="Term (months)" class="p-2 border rounded" />
+    <button type="submit" class="bg-purple-600 text-white rounded px-4 py-2">Create Quote</button>
   </form>
   <table class="min-w-full bg-white shadow rounded">
     <thead class="bg-gray-200">
       <tr>
         <th class="py-2 px-4 text-left">ID</th>
+        <th class="py-2 px-4 text-left">Product</th>
+        <th class="py-2 px-4 text-left">Sum Assured</th>
+        <th class="py-2 px-4 text-left">Term (months)</th>
         <th class="py-2 px-4 text-left">Status</th>
+        <th class="py-2 px-4 text-left">Premium</th>
         <th class="py-2 px-4 text-left">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let q of quotes" class="border-t">
         <td class="py-2 px-4">{{q.id}}</td>
+        <td class="py-2 px-4">{{q.product?.name || '-'}}</td>
+        <td class="py-2 px-4">{{q.sumAssured}}</td>
+        <td class="py-2 px-4">{{q.termMonths}}</td>
         <td class="py-2 px-4">{{q.status}}</td>
+        <td class="py-2 px-4">{{q.premiumCached || '-'}}</td>
         <td class="py-2 px-4 space-x-2">
-          <button (click)="price(q.id)" class="bg-blue-500 text-white px-2 py-1 rounded">Price</button>
-          <button (click)="confirm(q.id)" class="bg-green-500 text-white px-2 py-1 rounded">Confirm</button>
+          <button *ngIf="isAdmin" (click)="price(q.id)" class="bg-blue-500 text-white px-2 py-1 rounded">Get Quote</button>
+          <button (click)="confirm(q.id)" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
         </td>
       </tr>
     </tbody>

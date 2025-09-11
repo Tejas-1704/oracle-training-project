@@ -17,7 +17,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Customer create(@RequestBody Customer customer) {
         return service.create(customer);
     }
